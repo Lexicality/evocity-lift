@@ -12,3 +12,25 @@ ENT.Contact   = "lexi@lexi.org.uk";
 
 ENT.Spawnable      = false;
 ENT.AdminSpawnable = false;
+
+ENT.PhysgunDisabled = true;
+ENT.m_tblToolsAllowed = {};
+
+function ENT:Initialize()
+	self:SetModel("models/props_junk/garbage_carboard002a.mdl");
+	self:SetSolid(SOLID_OBB);
+	self:SetCollisionGroup(COLLISION_GROUP_DEBRIS);
+	self:SetMoveType(MOVETYPE_NONE);
+	if (SERVER) then
+		self:SetUseType(SIMPLE_USE);
+	end
+end
+
+function ENT:SetupDataTables()
+	self:NetworkVar("Entity", 0, "Lift");
+	-- TODO
+
+	if (SERVER) then
+		self:NetworkVarNotify("Lift", function(self, _, _, lift) self:SetParent(lift) end);
+	end
+end
