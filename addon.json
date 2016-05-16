@@ -1,0 +1,20 @@
+{
+	"title"   : "Evocity Lift",
+	"author"  : "Lex Robinson",
+	"contact" : "lexi@lexi.org.uk",
+	"license" : "MIT",
+	"type"    : "ServerContent",
+	"tags"    : ["realism", "roleplay"],
+	"ignore"  :
+	[
+		"LICENSE",
+		"*.mkdn",
+		".git*",
+		"*.sublime*",
+		"*.jpg",
+		"*.psd",
+		"*.png",
+		"*.gma",
+		"*.db",
+	]
+}
