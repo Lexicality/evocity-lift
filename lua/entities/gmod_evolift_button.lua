@@ -36,6 +36,15 @@ end
 
 if (SERVER) then
 	function ENT:Use(ply)
+		if (self:GetActive()) then
+			return;
+		end
+		local c = self:GetController();
+		if (not IsValid(c)) then
+			ErrorNoHalt("Button without a valid controller!");
+			return;
+		end
+		c:RequestStop(self:GetFloor());
 		print("Hello!");
 	end
 end

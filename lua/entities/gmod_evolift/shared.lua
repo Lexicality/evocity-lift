@@ -26,8 +26,25 @@ function ENT:Initialize()
 	end
 end
 
+function ENT:IsWaiting()
+	return self:GetIsWaiting()
+end
+
+MAX_ELEVATOR_FLOORS = 5;
+
 function ENT:SetupDataTables()
 	self:NetworkVar("Entity", 0, "Lift");
+	self:NetworkVar("Int", 0, "NumFloors");
+	self:NetworkVar("Int", 1, "TargetFloor");
+	self:NetworkVar("Int", 2, "MoveDirection");
+	self:NetworkVar("Float", 0, "WaitTime");
+	self:NetworkVar("Bool", 0, "IsWaiting");
+
+	-- Set up a decent number of floors for the save system
+	for i = 1, MAX_ELEVATOR_FLOORS do
+		self:NetworkVar("Bool", 10 + i, "Floor" .. i .. "Requested");
+	end
+
 	-- TODO
 
 	if (SERVER) then

@@ -9,18 +9,22 @@ local function loadMapData()
 		SearchArea = { Vector(-7000, -9000, 2800), Vector(-7300, -9500, 60) };
 		Stops = {
 			{
+				Name = "Ground";
 				Pos = Vector(-7114, -9381,  134.0679);
 				Ang = Angle(   0,  -90,    0);
 			};
 			{
+				Name = "Jail";
 				Pos = Vector(-7114, -9381,  902.4282);
 				Ang = Angle(   0,  -90,    0);
 			};
 			{
+				Name = "Admin";
 				Pos = Vector(-7120, -9401, 1543.0226);
 				Ang = Angle(   0,  180,    0);
 			};
 			{
+				Name = "Mayor";
 				Pos = Vector(-7122.4150, -9401, 2680.1448);
 				Ang = Angle(   0,  180,    0);
 			};
