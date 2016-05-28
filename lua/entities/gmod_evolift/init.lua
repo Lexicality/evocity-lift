@@ -56,45 +56,103 @@ function ENT:RequestStop(floor)
 end
 
 ---
--- Make the elevator re-evaluate its priorities and move if necessary
-function ENT:PokeElevator()
-	local nfloor = self:GetCurrentFloor();
-	local ye = false;
-	for i = 1, self:GetNumFloors() do
-		if (i ~= nfloor and self:GetDTBool(10 + i)) then
-			ye = true;
-			self:SetTargetFloor(i);
-			break;
+-- Checks if a particular floor has been requested
+-- @param {number} floor
+-- @return {bool}
+function ENT:IsFloorRequested(floor)
+	return self:GetDTBool(10 + floor);
+end
+
+function ENT:SearchUp()
+	local cfloor = self:GetCurrentFloor();
+	MsgN("Searching up from floor #", cfloor);
+	for i = cfloor, self:GetNumFloors() do
+		Msg("#", i, ": ");
+		if (self:IsFloorRequested(i)) then
+			MsgN("Requested!");
+			return i;
+		else
+			MsgN("nope");
 		end
 	end
-	-- TODO
-	-- Ayyy lmao
-	if (ye and not self:GetIsWaiting()) then
-		self:GetLift():Fire('startforward');
+	return nil;
+end
+
+function ENT:SearchDown()
+	local cfloor = self:GetCurrentFloor();
+	MsgN("Searching down from floor #", cfloor);
+	for i = cfloor, 1, -1 do
+		Msg("#", i, ": ");
+		if (self:IsFloorRequested(i)) then
+			MsgN("Requested!");
+			return i;
+		else
+			MsgN("nope");
+		end
+	end
+	return nil;
+end
+
+---
+-- Make the elevator re-evaluate its priorities and move if necessary
+function ENT:PokeElevator()
+	MsgN("Elevator poke!");
+	if (self:GetIsWaiting()) then
+		MsgN("Doing nothing since we're waiting");
+		return;
+	end
+
+	local target;
+	if (self:GetMoveDirection() == LIFT_MOVE_DIR_DOWN) then
+		target = self:SearchDown() or self:SearchUp();
+	else
+		target = self:SearchUp() or self:SearchDown();
+	end
+
+
+	if (not target) then
+		MsgN("No target!");
+		return;
+	end
+	self:SetTargetFloor(target);
+
+	local cfloor = self:GetCurrentFloor();
+	local lift = self:GetLift();
+
+	MsgN("Heading to floor #", target, " from floor #", cfloor);
+	if (target > cfloor) then
+		lift:Fire('setspeeddir', LIFT_MOVE_DIR_UP);
+	else
+		lift:Fire('setspeeddir', LIFT_MOVE_DIR_DOWN);
 	end
 end
 
 ---
--- Only called at target floor tbh
--- @TODO This needs to fire for all floors
--- @param {number} num
-function ENT:OnArriveAtFloor(num)
-	local floor = self:GetStops()[num];
-	if (not floor) then
-		error("Invalid floor #" .. num .. "!");
-	end
-	self:SetCurrentFloor(num);
+-- Halts the elevator and clears any state
+-- @param {number} floor
+function ENT:StopAtFloor(floor)
+	MsgN("Stopping at floor #", floor, "!");
 	-- Stop the lift at our target
 	local lift = self:GetLift();
 	lift:Fire("stop");
-	-- Stop more
+	-- Hang around so people can get on/off
 	self:SetIsWaiting(true);
 	self:SetWaitEnd(CurTime() + 10);
 	-- Reset the request
-	self:SetDTBool(10 + num, false);
-	-- Reset the elevator
-	self:PokeElevator();
-	-- TODO
+	self:SetDTBool(10 + floor, false);
+	self:SetTargetFloor(0);
+end
+
+---
+-- Called every time an elevator passes a floor
+-- @TODO This needs to fire for all floors
+-- @param {number} floor
+function ENT:OnArriveAtFloor(floor)
+	MsgN("Lift passed floor #", floor);
+	self:SetCurrentFloor(floor);
+	if (floor == self:GetTargetFloor()) then
+		self:StopAtFloor(floor);
+	end
 end
 
 ENT.lastPos = false;

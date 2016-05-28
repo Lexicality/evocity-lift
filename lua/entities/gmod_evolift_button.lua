@@ -45,6 +45,5 @@ if (SERVER) then
 			return;
 		end
 		c:RequestStop(self:GetFloor());
-		print("Hello!");
 	end
 end
