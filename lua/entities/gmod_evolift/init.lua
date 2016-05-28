@@ -53,6 +53,10 @@ function ENT:RequestStop(floor)
 	MsgN();
 	MsgN("Floor #", floor, " has been requested!");
 	MsgN();
+	if (self:IsFloorRequested(floor)) then
+		MsgN(" Ignoring since it's already requested");
+		return;
+	end
 	self:SetDTBool(10 + floor, true);
 	self:PokeElevator();
 end
