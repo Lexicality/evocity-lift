@@ -66,7 +66,7 @@ end
 function ENT:SearchUp()
 	local cfloor = self:GetCurrentFloor();
 	MsgN("Searching up from floor #", cfloor);
-	for i = cfloor, self:GetNumFloors() do
+	for i = cfloor + 1, self:GetNumFloors() do
 		Msg("#", i, ": ");
 		if (self:IsFloorRequested(i)) then
 			MsgN("Requested!");
@@ -81,7 +81,7 @@ end
 function ENT:SearchDown()
 	local cfloor = self:GetCurrentFloor();
 	MsgN("Searching down from floor #", cfloor);
-	for i = cfloor, 1, -1 do
+	for i = cfloor - 1, 1, -1 do
 		Msg("#", i, ": ");
 		if (self:IsFloorRequested(i)) then
 			MsgN("Requested!");
@@ -197,22 +197,18 @@ function ENT:Think()
 	self:NextThink(CurTime());
 
 	local stops = self:GetStops();
-	local stop = stops[tfloor];
-	if (not stop) then
-		error("Trying to go to " .. tfloor .. " but it doesn't exist!");
-		self:SetTargetFloor(0);
-		return;
+	for floor, stop in pairs(stops) do
+		local spos = stop.Pos;
+		if (
+			spos == pos or
+			-- Detetct moving too fast
+			-- Heading up
+			(spos.z < pos.z and spos.z > lpos.z) or
+			-- Heading down
+			(spos.z > pos.z and spos.z < lpos.z)
+		) then
+			self:OnArriveAtFloor(floor);
+			break;
+		end
 	end
-	local spos = stop.Pos;
-	if (
-		spos == pos or
-		-- Detetct moving too fast
-		-- Heading up
-		(spos.z < pos.z and spos.z > lpos.z) or
-		-- Heading down
-		(spos.z > pos.z and spos.z < lpos.z)
-	) then
-		self:OnArriveAtFloor(tfloor);
-	end
-	return true;
 end
