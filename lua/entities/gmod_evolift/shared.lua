@@ -35,9 +35,10 @@ MAX_ELEVATOR_FLOORS = 5;
 function ENT:SetupDataTables()
 	self:NetworkVar("Entity", 0, "Lift");
 	self:NetworkVar("Int", 0, "NumFloors");
-	self:NetworkVar("Int", 1, "TargetFloor");
-	self:NetworkVar("Int", 2, "MoveDirection");
-	self:NetworkVar("Float", 0, "WaitTime");
+	self:NetworkVar("Int", 1, "MoveDirection");
+	self:NetworkVar("Int", 2, "TargetFloor");
+	self:NetworkVar("Int", 3, "CurrentFloor");
+	self:NetworkVar("Float", 0, "WaitEnd");
 	self:NetworkVar("Bool", 0, "IsWaiting");
 
 	-- Set up a decent number of floors for the save system
