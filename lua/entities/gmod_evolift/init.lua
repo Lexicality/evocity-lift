@@ -50,7 +50,9 @@ function ENT:RequestStop(floor)
 	if (floor < 1 or floor > self:GetNumFloors()) then
 		error("Invalid floor #" .. floor .. " requested!");
 	end
+	MsgN();
 	MsgN("Floor #", floor, " has been requested!");
+	MsgN();
 	self:SetDTBool(10 + floor, true);
 	self:PokeElevator();
 end
@@ -65,9 +67,9 @@ end
 
 function ENT:SearchUp()
 	local cfloor = self:GetCurrentFloor();
-	MsgN("Searching up from floor #", cfloor);
+	MsgN("  ", "Searching up from floor #", cfloor);
 	for i = cfloor + 1, self:GetNumFloors() do
-		Msg("#", i, ": ");
+		Msg("   ", "#", i, ": ");
 		if (self:IsFloorRequested(i)) then
 			MsgN("Requested!");
 			return i;
@@ -80,9 +82,9 @@ end
 
 function ENT:SearchDown()
 	local cfloor = self:GetCurrentFloor();
-	MsgN("Searching down from floor #", cfloor);
+	MsgN("  ", "Searching down from floor #", cfloor);
 	for i = cfloor - 1, 1, -1 do
-		Msg("#", i, ": ");
+		Msg("   ", "#", i, ": ");
 		if (self:IsFloorRequested(i)) then
 			MsgN("Requested!");
 			return i;
@@ -98,7 +100,7 @@ end
 function ENT:PokeElevator()
 	MsgN("Elevator poke!");
 	if (self:GetIsWaiting()) then
-		MsgN("Doing nothing since we're waiting");
+		MsgN(" Doing nothing since we're waiting");
 		return;
 	end
 
@@ -111,7 +113,7 @@ function ENT:PokeElevator()
 
 
 	if (not target) then
-		MsgN("No target!");
+		MsgN(" No target!");
 		return;
 	end
 	self:SetTargetFloor(target);
@@ -119,7 +121,7 @@ function ENT:PokeElevator()
 	local cfloor = self:GetCurrentFloor();
 	local lift = self:GetLift();
 
-	MsgN("Heading to floor #", target, " from floor #", cfloor);
+	MsgN(" Heading to floor #", target, " from floor #", cfloor);
 	if (target > cfloor) then
 		lift:Fire('setspeeddir', LIFT_MOVE_DIR_UP);
 	else
@@ -131,7 +133,7 @@ end
 -- Halts the elevator and clears any state
 -- @param {number} floor
 function ENT:StopAtFloor(floor)
-	MsgN("Stopping at floor #", floor, "!");
+	MsgN(" Stopping at floor #", floor, "!");
 	-- Stop the lift at our target
 	local lift = self:GetLift();
 	lift:Fire("stop");
@@ -164,6 +166,7 @@ function ENT:Think()
 
 	-- Waiting
 	if (self:GetIsWaiting() and self:GetWaitEnd() < CurTime()) then
+		MsgN("Wait timeout!");
 		self:SetIsWaiting(false);
 		self:PokeElevator();
 	end
