@@ -12,10 +12,6 @@ DEFINE_BASECLASS(ENT.Base);
 
 AccessorFunc(ENT, "mt_stops", "Stops");
 
-LIFT_MOVE_DIR_UP = 1;
-LIFT_MOVE_DIR_DOWN = -1;
-LIFT_MOVE_DIR_STATIONARY = 0;
-
 function ENT:SetStops(stops)
 	local numstops = #stops;
 	if (numstops > MAX_ELEVATOR_FLOORS) then

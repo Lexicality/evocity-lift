@@ -10,23 +10,23 @@ local function loadMapData()
 		Stops = {
 			{
 				Name = "Ground";
-				Pos = Vector(-7114, -9381,  134.0679);
-				Ang = Angle(   0,  -90,    0);
+				Pos = Vector(-7114, -9382,  134.0679);
+				Ang = Angle(   0,  90,    0);
 			};
 			{
 				Name = "Jail";
-				Pos = Vector(-7114, -9381,  902.4282);
-				Ang = Angle(   0,  -90,    0);
+				Pos = Vector(-7114, -9382,  902.4282);
+				Ang = Angle(   0,  90,    0);
 			};
 			{
 				Name = "Admin";
-				Pos = Vector(-7120, -9401, 1543.0226);
-				Ang = Angle(   0,  180,    0);
+				Pos = Vector(-7121, -9401, 1543.0226);
+				Ang = Angle(   0,  0,    0);
 			};
 			{
 				Name = "Mayor";
-				Pos = Vector(-7122.4150, -9401, 2680.1448);
-				Ang = Angle(   0,  180,    0);
+				Pos = Vector(-7123, -9401, 2680.1448);
+				Ang = Angle(   0,  0,    0);
 			};
 		};
 		Control = {

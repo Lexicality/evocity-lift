@@ -16,6 +16,11 @@ ENT.AdminSpawnable = false;
 ENT.PhysgunDisabled = true;
 ENT.m_tblToolsAllowed = {};
 
+
+LIFT_MOVE_DIR_UP = 1;
+LIFT_MOVE_DIR_DOWN = -1;
+LIFT_MOVE_DIR_STATIONARY = 0;
+
 function ENT:Initialize()
 	self:SetModel("models/props_junk/garbage_carboard002a.mdl");
 	self:SetSolid(SOLID_OBB);
