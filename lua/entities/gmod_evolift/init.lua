@@ -27,8 +27,13 @@ function ENT:SetStops(stops)
 		button:Spawn();
 		button:Activate();
 		self:DeleteOnRemove(button);
-		self:NetworkVarNotify("Floor" .. i .. "Requested", function(_, _, _, value) button:SetActive(value) end);
+		local NWName = "Floor" .. i .. "Requested"
+		self:NetworkVarNotify(NWName, function(_, _, _, value)
+			button:SetActive(value)
+		end);
 		stop.Button = button;
+		stop.NWName = NWName;
+		stop.SetFunc = function(value) self["Set" .. NWName](self, value) end;
 		-- TODO
 	end
 	self.mt_stops = stops;
@@ -40,12 +45,22 @@ function ENT:Use(ply)
 end
 
 ---
+-- @param {number} floor
+-- @return {table} stop
+function ENT:GetStop(floor)
+	local stops = self:GetStops();
+	local stop = stops[floor];
+	if (not stop) then
+		error("Invalid floor #" .. floor .. "!");
+	end
+	return stop;
+end
+
+---
 -- Indicate that the elevator should go somewhere
 -- @param floor {number} Which floor to go to. 1 <= x <= numfloors
 function ENT:RequestStop(floor)
-	if (floor < 1 or floor > self:GetNumFloors()) then
-		error("Invalid floor #" .. floor .. " requested!");
-	end
+	local stop = self:GetStop(floor);
 	MsgN();
 	MsgN("Floor #", floor, " has been requested!");
 	MsgN();
@@ -53,7 +68,7 @@ function ENT:RequestStop(floor)
 		MsgN(" Ignoring since it's already requested");
 		return;
 	end
-	self:SetDTBool(10 + floor, true);
+	stop.SetFunc(true);
 	self:PokeElevator();
 end
 
@@ -134,6 +149,7 @@ end
 -- @param {number} floor
 function ENT:StopAtFloor(floor)
 	MsgN(" Stopping at floor #", floor, "!");
+	local stop = self:GetStop(floor);
 	-- Stop the lift at our target
 	local lift = self:GetLift();
 	lift:Fire("stop");
@@ -141,7 +157,7 @@ function ENT:StopAtFloor(floor)
 	self:SetIsWaiting(true);
 	self:SetWaitEnd(CurTime() + 10);
 	-- Reset the request
-	self:SetDTBool(10 + floor, false);
+	stop.SetFunc(false);
 	self:SetTargetFloor(0);
 end
 
