@@ -67,6 +67,9 @@ function ENT:RequestStop(floor)
 	if (self:IsFloorRequested(floor)) then
 		MsgN(" Ignoring since it's already requested");
 		return;
+	elseif (self:GetMoveDirection() == LIFT_MOVE_DIR_STATIONARY and self:GetCurrentFloor() == floor) then
+		MsgN(" Ignoring since we're already on that floor!");
+		return;
 	end
 	stop.SetFunc(true);
 	self:PokeElevator();
