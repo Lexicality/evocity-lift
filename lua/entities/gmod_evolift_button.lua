@@ -60,6 +60,7 @@ local bisize = bsize - bwidth * 2;
 
 local on_colour = Color(255, 0, 0);
 local off_colour = Color(70, 50, 50);
+local bgcolour = Color(20, 20, 20);
 
 local ah = 40;
 local aut = 15;
@@ -90,7 +91,7 @@ function ENT:Draw()
 	cam.Start3D2D(pos, ang, 0.05)
 		draw.NoTexture();
 
-		surface.SetDrawColor(color_black);
+		surface.SetDrawColor(bgcolour);
 		surface.DrawRect(0, 0, wide, high);
 
 		-- surface.SetTextColor(on_colour);
@@ -100,7 +101,7 @@ function ENT:Draw()
 		-- Button
 		local bcol = self:GetActive() and on_colour or off_colour;
 		draw.RoundedBox(8, bpos.x, bpos.y, bsize, bsize, bcol);
-		draw.RoundedBox(8, bipos.x, bipos.y, bisize, bisize, color_black);
+		draw.RoundedBox(8, bipos.x, bipos.y, bisize, bisize, bgcolour);
 
 		-- Arras
 		-- surface.SetTextPos(wide, aut);
