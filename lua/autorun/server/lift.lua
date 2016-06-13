@@ -30,8 +30,8 @@ local function loadMapData()
 			};
 		};
 		Control = {
-			Pos = Vector(81, -2.492188, -3.482422);
-			Ang = Angle(90, 0, 180);
+			Pos = Vector(81, -2.492188, 3);
+			Ang = Angle(0, 90, 90);
 		};
 	};
 end

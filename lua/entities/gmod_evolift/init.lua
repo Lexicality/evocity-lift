@@ -18,7 +18,9 @@ function ENT:SetStops(stops)
 		error("Tried to add " .. numstops .. " stops to the lift but it only supports " .. MAX_ELEVATOR_FLOORS .. "!");
 	end
 	self:SetNumFloors(numstops);
+	local fnames = {};
 	for i, stop in ipairs(stops) do
+		fnames[i] = stop.Name;
 		local button = ents.Create("gmod_evolift_button");
 		button:SetPos(stop.Pos);
 		button:SetAngles(stop.Ang);
@@ -37,6 +39,7 @@ function ENT:SetStops(stops)
 		-- TODO
 	end
 	self.mt_stops = stops;
+	self:SetFloorNames(util.TableToJSON(fnames));
 	-- TODO
 end
 
@@ -73,14 +76,6 @@ function ENT:RequestStop(floor)
 	end
 	stop.SetFunc(true);
 	self:PokeElevator();
-end
-
----
--- Checks if a particular floor has been requested
--- @param {number} floor
--- @return {bool}
-function ENT:IsFloorRequested(floor)
-	return self:GetDTBool(10 + floor);
 end
 
 function ENT:SearchUp()

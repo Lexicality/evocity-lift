@@ -26,6 +26,7 @@ function ENT:Initialize()
 	self:SetSolid(SOLID_OBB);
 	self:SetCollisionGroup(COLLISION_GROUP_DEBRIS);
 	self:SetMoveType(MOVETYPE_NONE);
+	self:DrawShadow(false);
 	if (SERVER) then
 		self:SetUseType(SIMPLE_USE);
 	end
@@ -33,6 +34,14 @@ end
 
 function ENT:IsWaiting()
 	return self:GetIsWaiting()
+end
+
+---
+-- Checks if a particular floor has been requested
+-- @param {number} floor
+-- @return {bool}
+function ENT:IsFloorRequested(floor)
+	return self:GetDTBool(10 + floor);
 end
 
 MAX_ELEVATOR_FLOORS = 5;
@@ -45,6 +54,7 @@ function ENT:SetupDataTables()
 	self:NetworkVar("Int", 3, "CurrentFloor");
 	self:NetworkVar("Float", 0, "WaitEnd");
 	self:NetworkVar("Bool", 0, "IsWaiting");
+	self:NetworkVar("String", 0, "FloorNames");
 
 	-- Set up a decent number of floors for the save system
 	for i = 1, MAX_ELEVATOR_FLOORS do
