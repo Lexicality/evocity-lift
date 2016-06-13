@@ -44,7 +44,15 @@ function ENT:SetStops(stops)
 end
 
 function ENT:Use(ply)
-	print("Hello!");
+	print("Hello", ply);
+	if (not (IsValid(ply) and ply:IsPlayer())) then
+		return;
+	end
+	local floor = self:GetFloorButtonBeingLookedAt(ply);
+	print("Floor requested: ", floor);
+	if (floor) then
+		self:RequestStop(floor);
+	end
 end
 
 ---

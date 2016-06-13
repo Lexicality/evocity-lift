@@ -43,6 +43,44 @@ function ENT:IsFloorRequested(floor)
 	return self:GetDTBool(10 + floor);
 end
 
+---
+-- Figures out if the player is looking at a button
+-- This function makes me sad with the amount of magic it has
+-- @param {Player} ply
+-- @return {(bool|number)} The floor # they're aiming at or false if not
+function ENT:GetFloorButtonBeingLookedAt(ply)
+	local tr = ply:GetEyeTrace();
+	if (tr.Entity ~= self) then
+		return false;
+	end
+
+	local pos = self:WorldToLocal(tr.HitPos);
+	-- magic
+	local x = pos.x * -20 + 200;
+	local y = pos.y * 20 + 480;
+
+	-- :( more magic
+	local margins = 40;
+	local bsize = 70;
+
+	if (x < margins or x > margins + bsize or y < margins) then
+		return false;
+	end
+
+	local fnum = self:GetNumFloors();
+
+	-- There's a lot of magic here
+	for i = 1, fnum do
+		local p1 = margins * i + bsize * (i - 1);
+		local p2 = margins * i + bsize * i;
+		if (y > p1 and y < p2) then
+			return i;
+		end
+	end
+
+	return false;
+end
+
 MAX_ELEVATOR_FLOORS = 5;
 
 function ENT:SetupDataTables()
