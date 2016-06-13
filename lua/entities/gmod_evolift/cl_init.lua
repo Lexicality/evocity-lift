@@ -72,7 +72,7 @@ function ENT:Draw()
 	local pos = self:GetPos() +
 		(self:GetForward() * 10) +
 		(self:GetRight()   * 24) +
-		(self:GetUp()      * -1);
+		(self:GetUp()      * -1.59);
 	local ang = self:GetAngles();
 
 

@@ -22,9 +22,8 @@ LIFT_MOVE_DIR_DOWN = -1;
 LIFT_MOVE_DIR_STATIONARY = 0;
 
 function ENT:Initialize()
-	self:SetModel("models/props_junk/garbage_carboard002a.mdl");
-	self:SetSolid(SOLID_OBB);
-	self:SetCollisionGroup(COLLISION_GROUP_DEBRIS);
+	self:SetModel("models/hunter/plates/plate05x1.mdl");
+	self:SetSolid(SOLID_VPHYSICS);
 	self:SetMoveType(MOVETYPE_NONE);
 	self:DrawShadow(false);
 	if (SERVER) then
