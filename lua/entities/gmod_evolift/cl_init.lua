@@ -38,8 +38,8 @@ local bisize = bsize - bwidth * 2;
 
 
 local function button(y, colour)
-	draw.RoundedBox(8, 40, y, bsize, bsize, colour);
-	draw.RoundedBox(8, 43, y + 3, bisize, bisize, bgcolour)
+	draw.RoundedBox(8, margins, y, bsize, bsize, colour);
+	draw.RoundedBox(8, margins + bwidth, y + bwidth, bisize, bisize, bgcolour)
 end
 
 local function text(y, words)
@@ -60,7 +60,7 @@ surface.CreateFont(fontName, {
 });
 
 function ENT:Draw()
-	self:DrawModel();
+	-- self:DrawModel();
 	local fnames = self.Floors;
 	if (not fnames) then
 		return;
@@ -71,7 +71,7 @@ function ENT:Draw()
 
 	local pos = self:GetPos() +
 		(self:GetForward() * 10) +
-		(self:GetRight()   * -4) +
+		(self:GetRight()   * 24) +
 		(self:GetUp()      * -1);
 	local ang = self:GetAngles();
 
@@ -83,15 +83,14 @@ function ENT:Draw()
 	cam.Start3D2D(pos, ang, 0.05)
 		draw.NoTexture();
 		surface.SetDrawColor(bgcolour);
-		surface.DrawRect(0, 0, wide, high);
+		surface.DrawRect(0, 0, wide, -high);
 
 		surface.SetFont(fontName);
 		surface.SetTextColor(txtcolour);
 
 		for i, name in ipairs(fnames) do
-			local j = nfloors - i + 1;
-			local a = j - 1;
-			local p = margins * j + bsize * a
+			local j = -i;
+			local p = margins * j + bsize * j
 			local c = off_colour;
 			if (self:IsFloorRequested(i)) then
 				c = on_colour;
